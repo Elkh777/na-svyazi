@@ -1,3 +1,8 @@
+import json
+from pathlib import Path
+
+POSTS_FILE = Path(__file__).resolve().parent / "posts.json"
+
 def ask_required(question, error_message):
     value = input(question).strip()
     while value == "":
@@ -21,7 +26,18 @@ def create_post():
         "city": city,
         "news": news
     }
-posts = []
+
+def save_posts(posts):
+    with POSTS_FILE.open("w", encoding="utf-8") as file:
+        json.dump(posts, file, ensure_ascii=False, indent=4)
+
+def load_posts():
+    if not POSTS_FILE.exists():
+        return []
+    with POSTS_FILE.open("r", encoding="utf-8") as file:
+        return json.load(file)
+    
+posts = load_posts() 
 
 while True:
     print("\nНа связи")
@@ -30,10 +46,12 @@ while True:
     print("0. Выйти")
 
     choice = input("Выберите действие: ").strip()
+    print()
 
     if choice == "1":
         post = create_post()
         posts.append(post)
+        save_posts(posts)
         print("Новость успешно добавлена!")
 
     elif choice == "2":

@@ -218,3 +218,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Личные записи при локальном запуске
+posts.json

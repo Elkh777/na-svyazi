@@ -36,39 +36,56 @@ def load_posts():
         return []
     with POSTS_FILE.open("r", encoding="utf-8") as file:
         return json.load(file)
-    
-posts = load_posts() 
 
-while True:
-    print("\nНа связи")
-    print("1. Добавить новость")
-    print("2. Показать новости")
-    print("0. Выйти")
+def show_posts_by_author(posts, author):
+    found = False 
 
-    choice = input("Выберите действие: ").strip()
-    print()
+    for post in posts: 
+        if post['author'].casefold() == author.casefold():
+            show_post(post)
+            print()
+            found = True
 
-    if choice == "1":
-        post = create_post()
-        posts.append(post)
-        save_posts(posts)
-        print("Новость успешно добавлена!")
+    if not found:
+        print(f"Пока нет новостей от автора '{author}'.")
 
-    elif choice == "2":
-        if not posts:
-            print("Пока нет новостей. Добавьте первую новость!")
+def main():
+    posts = load_posts()
+
+    while True:
+        print("\nНа связи")
+        print("1. Добавить новость")
+        print("2. Показать новости")
+        print("3. Показать новости по автору")
+        print("0. Выйти")
+
+        choice = input("Выберите действие: ").strip()
+        print()
+
+        if choice == "1":
+            post = create_post()
+            posts.append(post)
+            save_posts(posts)
+            print("Новость успешно добавлена!")
+
+        elif choice == "2":
+            if not posts:
+                print("Пока нет новостей. Добавьте первую новость!")
+            else:
+                for post in posts:
+                    show_post(post)
+                    print()
+
+        elif choice == "3":
+            author = ask_required("Введите имя автора: ", "Имя автора не может быть     пустым. Пожалуйста, введите имя автора.")
+            show_posts_by_author(posts, author)
+
+        elif choice == "0":
+            print("До встречи!")
+            break
+
         else:
-            for post in posts:
-                show_post(post)
-                print()
+            print("Неверный выбор. Пожалуйста, выберите 1, 2, 3 или 0.")
 
-    elif choice == "0":
-        print("До встречи!")
-        break
-
-    else:
-        print("Неверный выбор. Пожалуйста, выберите 1, 2 или 0.")
-
-
-
-
+if __name__ == "__main__":
+    main()

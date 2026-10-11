@@ -16,7 +16,11 @@ def show_post(post):
     print(f"Автор: {post['author']}")
     print(f"Город: {post['city']}")
     print(f"Новость: {post['news']}")
-    print(f"Дата: {post.get('created_at', 'Дата неизвестна')}")
+    if 'created_at' in post:
+        created_at = datetime.fromisoformat(post["created_at"])
+        print(f"Дата: {created_at.strftime('%d.%m.%Y %H:%M')}")
+    else:
+        print("Дата: Дата неизвестна")
 
 def create_post():
     author = ask_required("Как тебя зовут? ", "Имя не может быть пустым. Пожалуйста, введите свое имя.")
@@ -27,7 +31,7 @@ def create_post():
         "author": author,
         "city": city,
         "news": news,
-        "created_at": datetime.now().isoformat(timespec='seconds')
+        "created_at": datetime.now().isoformat(timespec="seconds")
     }
 
 def save_posts(posts):
@@ -40,17 +44,26 @@ def load_posts():
     with POSTS_FILE.open("r", encoding="utf-8") as file:
         return json.load(file)
 
-def show_posts_by_author(posts, author):
+def show_posts_by_author(posts, authors_text):
     found = False 
+    authors = []
 
+    for name in authors_text.split(","):
+        name = name.strip().casefold()
+        if name != "":
+            authors.append(name)
+    if not authors:
+        print("Введите хотя бы одно имя.")
+        return
+    
     for post in posts: 
-        if post['author'].casefold() == author.casefold():
+        if post['author'].casefold() in authors:
             show_post(post)
             print()
             found = True
 
     if not found:
-        print(f"Пока нет новостей от автора '{author}'.")
+        print("У выбранных авторов пока нет новостей.")
 
 def main():
     try:
@@ -64,7 +77,7 @@ def main():
         print("\nНа связи")
         print("1. Добавить новость")
         print("2. Показать новости")
-        print("3. Показать новости по автору")
+        print("3. Показать новости выбранных авторов")
         print("0. Выйти")
 
         choice = input("Выберите действие: ").strip()
@@ -85,8 +98,8 @@ def main():
                     print()
 
         elif choice == "3":
-            author = ask_required("Введите имя автора: ", "Имя автора не может быть     пустым. Пожалуйста, введите имя автора.")
-            show_posts_by_author(posts, author)
+            authors_text = ask_required("Введите имена авторов (через запятую): ", "Имена авторов не могут быть пустыми. Пожалуйста, введите имена авторов.")
+            show_posts_by_author(posts, authors_text)
 
         elif choice == "0":
             print("До встречи!")

@@ -1,0 +1,6 @@
+author = input("Как тебя зовут? ")
+city = input("В каком городе ты живешь? ")
+news = input("Что у тебя произошло за неделю? ")
+print(f"Автор: {author}")
+print(f"Город: {city}")
+print(f"Новость недели: {news}")

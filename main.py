@@ -1,21 +1,16 @@
-author = input("Как тебя зовут? ").strip()
+def ask_required(question, error_message):
+    value = input(question).strip()
+    while value == "":
+        print(error_message)
+        value = input(question).strip()
 
-while author == "":
-    print("Имя не может быть пустым. Пожалуйста, введите свое имя.")
-    author = input("Как тебя зовут? ").strip()
-    
+    return value
 
+author = ask_required("Как тебя зовут? ", "Имя не может быть пустым. Пожалуйста, введите свое имя.")
 
-city = input("В каком городе ты живешь? ").strip()
-while city == "":
-    print("Город не может быть пустым. Пожалуйста, введите название города.")
-    city = input("В каком городе ты живешь? ").strip()
+city = ask_required("В каком городе ты живешь? ", "Город не может быть пустым. Пожалуйста, введите название города.")
 
-news = input("Что у тебя произошло за неделю? ").strip()
-
-while news == "":
-    print("Новость не может быть пустой. Пожалуйста, расскажи о своей неделе.")
-    news = input("Что у тебя произошло за неделю? ").strip()
+news = ask_required("Что у тебя произошло за неделю? ", "Новость не может быть пустой. Пожалуйста, расскажи о своей неделе.")
 
 print(f"Автор: {author}")
 print(f"Город: {city}")

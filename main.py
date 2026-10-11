@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 POSTS_FILE = Path(__file__).resolve().parent / "posts.json"
 
@@ -15,6 +16,7 @@ def show_post(post):
     print(f"Автор: {post['author']}")
     print(f"Город: {post['city']}")
     print(f"Новость: {post['news']}")
+    print(f"Дата: {post.get('created_at', 'Дата неизвестна')}")
 
 def create_post():
     author = ask_required("Как тебя зовут? ", "Имя не может быть пустым. Пожалуйста, введите свое имя.")
@@ -24,7 +26,8 @@ def create_post():
     return  {
         "author": author,
         "city": city,
-        "news": news
+        "news": news,
+        "created_at": datetime.now().isoformat(timespec='seconds')
     }
 
 def save_posts(posts):

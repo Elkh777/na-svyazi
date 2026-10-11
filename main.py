@@ -50,7 +50,12 @@ def show_posts_by_author(posts, author):
         print(f"Пока нет новостей от автора '{author}'.")
 
 def main():
-    posts = load_posts()
+    try:
+        posts = load_posts()
+    except json.JSONDecodeError:
+        print(f"Не удалось прочитать {POSTS_FILE.name}: неверный формат JSON.")
+        print("Проверь файл.")
+        return
 
     while True:
         print("\nНа связи")
